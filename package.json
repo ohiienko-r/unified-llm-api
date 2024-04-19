@@ -1,0 +1,24 @@
+{
+  "name": "unified-llm-api",
+  "version": "1.0.0",
+  "description": "\"One Class to rule them all\"",
+  "main": "./dist/index.js",
+  "scripts": {
+    "compile": "npx tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "LLM",
+    "API"
+  ],
+  "author": "Ohiienko Roman",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.7.1",
+    "openai": "^4.38.1"
+  }
+}
