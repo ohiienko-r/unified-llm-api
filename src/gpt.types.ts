@@ -8,7 +8,7 @@ export type Message = {
 export type RequestOptions = {
   frequency_penalty?: number | null;
   max_tokens?: number | null;
-  presence_penalty: number | null;
-  temperature: number | null;
-  top_p: number | null;
+  presence_penalty?: number | null;
+  temperature?: number | null;
+  top_p?: number | null;
 };

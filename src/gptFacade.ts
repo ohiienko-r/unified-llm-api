@@ -2,6 +2,9 @@ import OpenAI from "openai";
 import { ModelName, ROLE } from "./gpt.dto";
 import { Message, RequestOptions } from "./gpt.types";
 
+/**
+ * Facade for the interaction with ChatGPT through the OpenAI API;
+ */
 class ChatGPT {
   private model: OpenAI;
   private modelName: (typeof ModelName)[keyof typeof ModelName];
@@ -17,6 +20,12 @@ class ChatGPT {
     this.systemMessage = { role: ROLE.SYSTEM, content: systemMessage ?? "" };
   }
 
+  /**
+   *
+   * @param {Message[]} messages - an array with conversation messages object/s;
+   * @param {RequestOptions}options - optional model request options;
+   * @returns
+   */
   async completions(messages: Message[], options?: RequestOptions) {
     this.systemMessage?.content && messages.unshift(this.systemMessage);
 
