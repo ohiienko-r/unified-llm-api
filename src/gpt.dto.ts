@@ -11,8 +11,3 @@ export const ROLE = {
   USER: "user",
   ASSISTANT: "assistant",
 } as const;
-
-export type Message = {
-  role: (typeof ROLE)[keyof typeof ROLE];
-  content: string;
-};
