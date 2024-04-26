@@ -29,9 +29,9 @@ class Gemini {
   /**
    *
    * @param {string} prompt - user's prompt to model;
-   * @returns - text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
+   * @returns text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
    */
-  async generateContent(prompt: string) {
+  async generateContent(prompt: string): Promise<string> {
     try {
       const result = await this.model.generateContent(prompt);
       const response = result.response;
@@ -45,9 +45,9 @@ class Gemini {
    *
    * @param {Content[]} history - chat history array;
    * @param {string} prompt - user's prompt to model;
-   * @returns
+   * @returns text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
    */
-  async chat(history: Content[], prompt: string) {
+  async chat(history: Content[], prompt: string): Promise<string> {
     try {
       const chat = this.model.startChat({ history });
       const result = await chat.sendMessage(prompt);

@@ -22,13 +22,34 @@ class ChatGPT {
 
   /**
    *
+   * @param {string} prompt - user's prompt to model;
+   * @param {RequestOptions} options - request options with model settings
+   * @returns model response for the given chat prompt;
+   */
+  async generateContent(
+    prompt: string,
+    options?: RequestOptions
+  ): Promise<string | null> {
+    const messages = [{ role: ROLE.USER, content: prompt }] as Message[];
+    try {
+      const response = await this.chat(messages, options);
+      return response;
+    } catch (error) {
+      throw new Error("Unexpected type returned from completions");
+    }
+  }
+
+  /**
+   *
    * @param {Message[]} messages - an array with conversation messages object/s;
    * @param {RequestOptions}options - optional model request options;
-   * @returns - model response for the given chat conversation;
+   * @returns model response for the given chat conversation;
    */
-  async completions(messages: Message[], options?: RequestOptions) {
+  async chat(
+    messages: Message[],
+    options?: RequestOptions
+  ): Promise<string | null> {
     this.systemMessage?.content && messages.unshift(this.systemMessage);
-
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,
@@ -42,7 +63,7 @@ class ChatGPT {
         throw new Error("Unexpected type returned from completions");
       }
     } catch (error) {
-      throw new Error(`THE FOLLOWING ERROR OCCURED: ${error}`);
+      throw new Error(`AN ERROR HAS OCCURED: ${error}`);
     }
   }
 }
