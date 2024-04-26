@@ -1,20 +1,20 @@
 import OpenAI from "openai";
-import { ModelName, ROLE } from "./gpt.dto";
-import { Message, RequestOptions } from "./gpt.types";
+import { MODEL_NAME, ROLE } from "./gpt.dto";
+import { Message, RequestOptions, GPTConfig } from "./gpt.types";
 
 /**
  * Facade for the interaction with ChatGPT through the OpenAI API;
  */
 class ChatGPT {
   private model: OpenAI;
-  private modelName: (typeof ModelName)[keyof typeof ModelName];
+  private modelName: (typeof MODEL_NAME)[keyof typeof MODEL_NAME];
   private systemMessage?: Message;
 
-  constructor(
-    APIkey: string,
-    modelName: (typeof ModelName)[keyof typeof ModelName],
-    systemMessage?: string
-  ) {
+  constructor({
+    APIkey,
+    modelName = "gpt-3.5-turbo",
+    systemMessage,
+  }: GPTConfig) {
     this.model = new OpenAI({ apiKey: APIkey });
     this.modelName = modelName;
     this.systemMessage = { role: ROLE.SYSTEM, content: systemMessage ?? "" };
@@ -24,7 +24,7 @@ class ChatGPT {
    *
    * @param {Message[]} messages - an array with conversation messages object/s;
    * @param {RequestOptions}options - optional model request options;
-   * @returns
+   * @returns - model response for the given chat conversation;
    */
   async completions(messages: Message[], options?: RequestOptions) {
     this.systemMessage?.content && messages.unshift(this.systemMessage);
