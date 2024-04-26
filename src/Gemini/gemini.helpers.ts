@@ -1,13 +1,6 @@
 import { HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import { BLOCK_THRESHOLD } from "./gemini.dto";
 import { SafetySetting } from "./gemini.types";
-
-const BLOCK_THRESHOLD = {
-  UNSPECIFIED: "unspecified",
-  LOW_AND_ABOVE: "low",
-  MEDIUM_AND_ABOVE: "medium",
-  ONLY_HIGH: "high",
-  NONE: "none",
-} as const;
 
 export const getSafetySettings = (
   harmBlockThreshold: (typeof BLOCK_THRESHOLD)[keyof typeof BLOCK_THRESHOLD]
