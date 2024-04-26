@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { MODEL_NAME, ROLE } from "./gpt.dto";
+import { GPT_MODEL_NAME, ROLE } from "./gpt.dto";
 import { Message, RequestOptions, GPTConfig } from "./gpt.types";
 
 /**
@@ -7,7 +7,7 @@ import { Message, RequestOptions, GPTConfig } from "./gpt.types";
  */
 class ChatGPT {
   private model: OpenAI;
-  private modelName: (typeof MODEL_NAME)[keyof typeof MODEL_NAME];
+  private modelName: (typeof GPT_MODEL_NAME)[keyof typeof GPT_MODEL_NAME];
   private systemMessage?: Message;
 
   constructor({

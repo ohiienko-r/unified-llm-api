@@ -1,4 +1,4 @@
-export const MODEL_NAME = {
+export const GPT_MODEL_NAME = {
   GPT_35_TURBO: "gpt-3.5-turbo",
   GPT_35_TURBO_0125: "gpt-3.5-turbo-0125",
   GPT_35_TURBO_16K: "gpt-3.5-turbo-16k",

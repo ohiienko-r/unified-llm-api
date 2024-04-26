@@ -3,11 +3,11 @@ import {
   HarmBlockThreshold,
   GenerationConfig,
 } from "@google/generative-ai";
-import { MODEL_NAME, BLOCK_THRESHOLD } from "./gemini.dto";
+import { GEMINI_MODEL_NAME, BLOCK_THRESHOLD } from "./gemini.dto";
 
 export type GeminiConfig = {
   APIkey: string;
-  modelName?: (typeof MODEL_NAME)[keyof typeof MODEL_NAME];
+  modelName?: (typeof GEMINI_MODEL_NAME)[keyof typeof GEMINI_MODEL_NAME];
   safetyBlockThreshold?: (typeof BLOCK_THRESHOLD)[keyof typeof BLOCK_THRESHOLD];
   generationConfig?: GenerationConfig;
 };
