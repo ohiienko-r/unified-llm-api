@@ -3,6 +3,7 @@ import { GEMINI_MODEL_NAME } from "./models/Gemini/gemini.dto";
 import { ROLE } from "./index.dto";
 
 export type GPTModelName = (typeof GPT_MODEL_NAME)[keyof typeof GPT_MODEL_NAME];
+
 export type GeminiModelName =
   (typeof GEMINI_MODEL_NAME)[keyof typeof GEMINI_MODEL_NAME];
 

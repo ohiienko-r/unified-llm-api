@@ -1,6 +1,7 @@
 import { ChatGPT, Gemini } from "./models";
 import { GPT_MODEL_NAME } from "./models/ChatGPT/gpt.dto";
 import { GEMINI_MODEL_NAME } from "./models/Gemini/gemini.dto";
+import { ROLE } from "./index.dto";
 import {
   LLMConfig,
   History,
@@ -211,7 +212,10 @@ class LLM {
     return response;
   }
 
-  async chat(hisotry: History) {}
+  async chat(history: History) {
+    const chatHistory = this.mapHistory(history);
+    console.log(chatHistory);
+  }
 
   private getModelInstance(systemMessage?: string) {
     if (
@@ -229,6 +233,31 @@ class LLM {
       return new Gemini({
         APIkey: this.APIkey,
         modelName: this.modelName as GeminiModelName,
+      });
+    }
+  }
+
+  private mapHistory(history: History) {
+    if (
+      Object.values(GPT_MODEL_NAME).includes(this.modelName as GPTModelName)
+    ) {
+      return history;
+    } else if (
+      Object.values(GEMINI_MODEL_NAME).includes(
+        this.modelName as GeminiModelName
+      )
+    ) {
+      return history.map((message) => {
+        let role;
+        if (message.role === ROLE.SYSTEM || message.role === ROLE.ASSISTANT) {
+          role = ROLE.MODEL;
+        } else {
+          role = message.role;
+        }
+        return {
+          role: role,
+          parts: [{ text: message.content }],
+        };
       });
     }
   }
