@@ -1,6 +1,4 @@
-import { ChatGPT, Gemini } from "./models";
-import { GPT_MODEL_NAME } from "./models/ChatGPT/gpt.dto";
-import { GEMINI_MODEL_NAME } from "./models/Gemini/gemini.dto";
+import { ChatGPT, Gemini, GPT_MODEL_NAME, GEMINI_MODEL_NAME } from "./models";
 import { ROLE } from "./index.dto";
 import {
   LLMConfig,
@@ -224,6 +222,7 @@ class LLM {
       return new ChatGPT({
         APIkey: this.APIkey,
         modelName: this.modelName as GPTModelName,
+        systemMessage: systemMessage,
       });
     } else if (
       Object.values(GEMINI_MODEL_NAME).includes(
@@ -234,6 +233,10 @@ class LLM {
         APIkey: this.APIkey,
         modelName: this.modelName as GeminiModelName,
       });
+    } else {
+      throw new Error(
+        "AN ERROR HAS OCCURED: no such model available, please check if you stated the correct name of the model."
+      );
     }
   }
 
