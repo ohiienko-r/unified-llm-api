@@ -8,37 +8,39 @@ import { Message, RequestOptions, GPTConfig } from "./gpt.types";
 class ChatGPT {
   private model: OpenAI;
   private modelName: (typeof GPT_MODEL_NAME)[keyof typeof GPT_MODEL_NAME];
-  private systemMessage?: Message;
+  private requestOptions: RequestOptions | undefined;
 
-  constructor({
-    APIkey,
-    modelName = "gpt-3.5-turbo",
-    systemMessage,
-  }: GPTConfig) {
+  constructor({ APIkey, modelName = "gpt-3.5-turbo", options }: GPTConfig) {
     this.model = new OpenAI({ apiKey: APIkey });
     this.modelName = modelName;
-    this.systemMessage = { role: ROLE.SYSTEM, content: systemMessage ?? "" };
+    this.requestOptions = options;
   }
-
+  //TODO: reimplement system message
   /**
    *
    * @param {string} prompt - user's prompt to model;
    * @param {RequestOptions} options - request options with model settings
    * @returns model response for the given chat prompt;
    */
-  async generateContent(
-    prompt: string,
-    options?: RequestOptions
-  ): Promise<string | null> {
+  async generateContent(prompt: string): Promise<string | null> {
     const messages = [{ role: ROLE.USER, content: prompt }] as Message[];
     try {
-      const response = await this.chat(messages, options);
-      return response;
+      const completions = await this.model.chat.completions.create({
+        messages: messages,
+        model: this.modelName,
+        ...this.requestOptions,
+      });
+
+      if ("choices" in completions) {
+        return completions.choices[0].message.content;
+      } else {
+        throw new Error("Unexpected type returned from completions");
+      }
     } catch (error) {
       throw new Error("Unexpected type returned from completions");
     }
   }
-
+  //TODO: reimplement system message
   /**
    *
    * @param {Message[]} messages - an array with conversation messages object/s;
@@ -47,9 +49,11 @@ class ChatGPT {
    */
   async chat(
     messages: Message[],
+    prompt: string,
     options?: RequestOptions
   ): Promise<string | null> {
-    this.systemMessage?.content && messages.unshift(this.systemMessage);
+    messages.push({ role: ROLE.USER, content: prompt });
+
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,

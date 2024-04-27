@@ -3,7 +3,7 @@ import { ROLE, GPT_MODEL_NAME } from "./gpt.dto";
 export type GPTConfig = {
   APIkey: string;
   modelName?: (typeof GPT_MODEL_NAME)[keyof typeof GPT_MODEL_NAME];
-  systemMessage?: string;
+  options?: RequestOptions;
 };
 
 export type Message = {

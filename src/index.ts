@@ -215,14 +215,13 @@ class LLM {
     console.log(chatHistory);
   }
 
-  private getModelInstance(systemMessage?: string) {
+  private getModelInstance() {
     if (
       Object.values(GPT_MODEL_NAME).includes(this.modelName as GPTModelName)
     ) {
       return new ChatGPT({
         APIkey: this.APIkey,
         modelName: this.modelName as GPTModelName,
-        systemMessage: systemMessage,
       });
     } else if (
       Object.values(GEMINI_MODEL_NAME).includes(

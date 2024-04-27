@@ -25,7 +25,7 @@ class Gemini {
       safetySettings: getSafetySettings(safetyBlockThreshold),
     });
   }
-
+  //TODO: reimplement system message
   /**
    *
    * @param {string} prompt - user's prompt to model;
@@ -40,7 +40,7 @@ class Gemini {
       throw new Error(`AN ERROR HAS OCCURED: ${error}`);
     }
   }
-
+  //TODO: reimplement system message
   /**
    *
    * @param {Content[]} history - chat history array;
