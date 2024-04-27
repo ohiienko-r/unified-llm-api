@@ -1,4 +1,6 @@
-export const MODEL_NAME = {
-  CHAT_GPT: "gpt",
-  GEMINI: "gemini",
+export const ROLE = {
+  SYSTEM: "system",
+  USER: "user",
+  ASSISTANT: "assistant",
+  MODEL: "model",
 } as const;
