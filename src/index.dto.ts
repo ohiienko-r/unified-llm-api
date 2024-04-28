@@ -4,3 +4,8 @@ export const ROLE = {
   ASSISTANT: "assistant",
   MODEL: "model",
 } as const;
+
+export const MODEL_VENDOR = {
+  GOOGLE: "google",
+  OPENAI: "openai",
+};

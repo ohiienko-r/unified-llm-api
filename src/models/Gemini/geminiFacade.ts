@@ -4,12 +4,13 @@ import {
   Content,
 } from "@google/generative-ai";
 import { getSafetySettings } from "./gemini.helpers";
+import { IModel } from "../types";
 import { GeminiConfig } from "./gemini.types";
 
 /**
  * Facade for the interaction with Gemini through the Google Generative AI API;
  */
-class Gemini {
+class Gemini implements IModel {
   private model: GenerativeModel;
 
   constructor({
