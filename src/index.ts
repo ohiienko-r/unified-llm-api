@@ -30,8 +30,12 @@ class LLM {
     this.model = this.getModelInstance();
     this.chatHistory = [];
     this.history = {
-      setSystemMessage: (systemMessage) => {},
-      setNewMessage: (newMessage) => {},
+      setSystemMessage: (systemMessage) => {
+        this.chatHistory.push({ role: ROLE.SYSTEM, content: systemMessage });
+      },
+      setNewMessage: (newMessage) => {
+        this.chatHistory.push(newMessage);
+      },
       get: () => {
         return this.chatHistory;
       },
@@ -42,7 +46,9 @@ class LLM {
   }
 
   async generateContent(prompt: string) {
+    this.history.setNewMessage({ role: ROLE.USER, content: prompt });
     const response = await this.model?.generateContent(prompt);
+    this.history.setNewMessage({ role: ROLE.SYSTEM, content: response });
     return response;
   }
 

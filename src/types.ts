@@ -21,14 +21,14 @@ export type LLMConfig = {
 
 export type Message = {
   role: (typeof ROLE)[keyof typeof ROLE];
-  content: string;
+  content: string | null;
 };
 
 export type History = Message[];
 
 export interface IHistory {
   setSystemMessage: (systemMessage: string) => void;
-  setNewMessage: (newMessage: string) => void;
+  setNewMessage: (newMessage: Message) => void;
   get: () => History;
   clear: () => void;
 }
