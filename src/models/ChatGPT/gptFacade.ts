@@ -1,7 +1,8 @@
 import OpenAI from "openai";
 import { GPT_MODEL_NAME, GPT_ROLE } from "./gpt.dto";
-import { IModel } from "../types";
+import { defaultSystemMesage } from "../models.dto";
 import { Message, RequestOptions, GPTConfig } from "./gpt.types";
+import { IModel } from "../types";
 
 /**
  * Facade for the interaction with ChatGPT through the OpenAI API;
@@ -28,9 +29,10 @@ class ChatGPT implements IModel {
     systemMessage?: string
   ): Promise<string | null> {
     const messages = [
-      { role: GPT_ROLE.SYSTEM, content: systemMessage },
+      { role: GPT_ROLE.SYSTEM, content: systemMessage ?? defaultSystemMesage },
       { role: GPT_ROLE.USER, content: prompt },
     ] as Message[];
+
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,

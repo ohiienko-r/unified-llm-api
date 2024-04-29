@@ -3,10 +3,11 @@ import {
   GenerativeModel,
   Content,
 } from "@google/generative-ai";
-import { getSafetySettings } from "./gemini.helpers";
-import { IModel } from "../types";
-import { GeminiConfig } from "./gemini.types";
 import { GEMINI_ROLE } from "./gemini.dto";
+import { defaultSystemMesage } from "../models.dto";
+import { getSafetySettings } from "./gemini.helpers";
+import { GeminiConfig } from "./gemini.types";
+import { IModel } from "../types";
 
 /**
  * Facade for the interaction with Gemini through the Google Generative AI API;
@@ -42,9 +43,14 @@ class Gemini implements IModel {
       const req = [
         {
           role: GEMINI_ROLE.USER,
-          parts: [{ text: `${systemMessage} \n ${prompt}` }],
+          parts: [{ text: systemMessage ?? defaultSystemMesage }],
+        },
+        {
+          role: GEMINI_ROLE.USER,
+          parts: [{ text: prompt }],
         },
       ] as Content[];
+
       const result = await this.model.generateContent({ contents: req });
       const response = result.response;
       return response.text();
