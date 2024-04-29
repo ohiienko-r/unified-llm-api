@@ -9,7 +9,10 @@ import {
   Model,
   ModelVendor,
   IHistory,
+  GenerationConfigUnion,
 } from "./types";
+import { RequestOptions } from "./models/ChatGPT/gpt.types";
+import { GenerationConfig } from "@google/generative-ai";
 
 /**
  * Class provides simple access to basic text interactions with the following LLMs: ChatGPT, Gemini;
@@ -21,13 +24,15 @@ class LLM {
   private modelName: ModelNameUnion;
   private APIkey: string;
   private model: Model;
+  private generationConfig: GenerationConfigUnion;
   private chatHistory: History;
   public history: IHistory;
 
-  constructor({ model, APIkey }: LLMConfig) {
+  constructor({ model, APIkey, generationConfig }: LLMConfig) {
     this.modelName = model;
     this.APIkey = APIkey;
     this.model = this.getModelInstance();
+    this.generationConfig = generationConfig;
     this.chatHistory = [];
     this.history = {
       setSystemMessage: (systemMessage) => {
@@ -63,11 +68,13 @@ class LLM {
         return new ChatGPT({
           APIkey: this.APIkey,
           modelName: this.modelName as GPTModelName,
+          options: this.generationConfig as RequestOptions,
         });
       case MODEL_VENDOR.GOOGLE:
         return new Gemini({
           APIkey: this.APIkey,
           modelName: this.modelName as GeminiModelName,
+          generationConfig: this.generationConfig as GenerationConfig,
         });
       default:
         throw new Error("AN ERROR HAS OCCURED: Unsupported model type.");
