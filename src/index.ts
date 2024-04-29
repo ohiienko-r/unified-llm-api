@@ -36,7 +36,7 @@ class LLM {
     this.chatHistory = [];
     this.history = {
       setSystemMessage: (systemMessage) => {
-        this.chatHistory.push({ role: ROLE.SYSTEM, content: systemMessage });
+        this.chatHistory.unshift({ role: ROLE.SYSTEM, content: systemMessage });
       },
       setNewMessage: (newMessage) => {
         this.chatHistory.push(newMessage);
@@ -50,14 +50,17 @@ class LLM {
     };
   }
 
-  async generateContent(prompt: string) {
+  async generateContent(
+    prompt: string,
+    systemMessage?: string
+  ): Promise<string | null> {
     this.history.setNewMessage({ role: ROLE.USER, content: prompt });
-    const response = await this.model?.generateContent(prompt);
+    const response = await this.model?.generateContent(prompt, systemMessage);
     this.history.setNewMessage({ role: ROLE.SYSTEM, content: response });
     return response;
   }
 
-  async chat(history: History) {
+  async chat(history: History, prompt: string, systemMessage?: string) {
     const chatHistory = this.mapHistory(history);
     console.log(chatHistory);
   }

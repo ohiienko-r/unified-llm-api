@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { GPT_MODEL_NAME, ROLE } from "./gpt.dto";
+import { GPT_MODEL_NAME, GPT_ROLE } from "./gpt.dto";
 import { IModel } from "../types";
 import { Message, RequestOptions, GPTConfig } from "./gpt.types";
 
@@ -16,14 +16,21 @@ class ChatGPT implements IModel {
     this.modelName = modelName;
     this.requestOptions = options;
   }
-  //TODO: reimplement system message
+
   /**
    *
    * @param {string} prompt - user's prompt to model;
+   * @param {string} systemMessage - text instructions to LLM on how to behave;
    * @returns model response for the given chat prompt;
    */
-  async generateContent(prompt: string): Promise<string | null> {
-    const messages = [{ role: ROLE.USER, content: prompt }] as Message[];
+  async generateContent(
+    prompt: string,
+    systemMessage?: string
+  ): Promise<string | null> {
+    const messages = [
+      { role: GPT_ROLE.SYSTEM, content: systemMessage },
+      { role: GPT_ROLE.USER, content: prompt },
+    ] as Message[];
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,
@@ -47,7 +54,7 @@ class ChatGPT implements IModel {
    * @returns model response for the given chat conversation;
    */
   async chat(messages: Message[], prompt: string): Promise<string | null> {
-    messages.push({ role: ROLE.USER, content: prompt });
+    messages.push({ role: GPT_ROLE.USER, content: prompt });
 
     try {
       const completions = await this.model.chat.completions.create({

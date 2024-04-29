@@ -6,6 +6,7 @@ import {
 import { getSafetySettings } from "./gemini.helpers";
 import { IModel } from "../types";
 import { GeminiConfig } from "./gemini.types";
+import { GEMINI_ROLE } from "./gemini.dto";
 
 /**
  * Facade for the interaction with Gemini through the Google Generative AI API;
@@ -26,15 +27,25 @@ class Gemini implements IModel {
       safetySettings: getSafetySettings(safetyBlockThreshold),
     });
   }
-  //TODO: reimplement system message
+
   /**
    *
    * @param {string} prompt - user's prompt to model;
+   * @param {string} systemMessage - text instructions to LLM on how to behave;
    * @returns text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
    */
-  async generateContent(prompt: string): Promise<string> {
+  async generateContent(
+    prompt: string,
+    systemMessage?: string
+  ): Promise<string> {
     try {
-      const result = await this.model.generateContent(prompt);
+      const req = [
+        {
+          role: GEMINI_ROLE.USER,
+          parts: [{ text: `${systemMessage} \n ${prompt}` }],
+        },
+      ] as Content[];
+      const result = await this.model.generateContent({ contents: req });
       const response = result.response;
       return response.text();
     } catch (error) {

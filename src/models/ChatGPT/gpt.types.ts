@@ -1,4 +1,4 @@
-import { ROLE, GPT_MODEL_NAME } from "./gpt.dto";
+import { GPT_ROLE, GPT_MODEL_NAME } from "./gpt.dto";
 
 export type GPTConfig = {
   APIkey: string;
@@ -7,7 +7,7 @@ export type GPTConfig = {
 };
 
 export type Message = {
-  role: (typeof ROLE)[keyof typeof ROLE];
+  role: (typeof GPT_ROLE)[keyof typeof GPT_ROLE];
   content: string;
 };
 

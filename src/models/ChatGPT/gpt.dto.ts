@@ -6,7 +6,7 @@ export const GPT_MODEL_NAME = {
   GPT_4_TURBO: "gpt-4-turbo",
 } as const;
 
-export const ROLE = {
+export const GPT_ROLE = {
   SYSTEM: "system",
   USER: "user",
   ASSISTANT: "assistant",
