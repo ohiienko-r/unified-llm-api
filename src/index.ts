@@ -3,13 +3,11 @@ import { ROLE, MODEL_VENDOR } from "./index.dto";
 import {
   LLMConfig,
   History,
-  ModelNameUnion,
   GPTModelName,
   GeminiModelName,
   Model,
   ModelVendor,
   IHistory,
-  GenerationConfigUnion,
 } from "./types";
 import { RequestOptions } from "./models/ChatGPT/gpt.types";
 import { GenerationConfig } from "@google/generative-ai";
@@ -21,18 +19,25 @@ import { GenerationConfig } from "@google/generative-ai";
  */
 
 class LLM {
-  private modelName: ModelNameUnion;
-  private APIkey: string;
-  private model: Model;
-  private generationConfig: GenerationConfigUnion;
+  private modelName;
+  private APIkey;
+  private model;
+  private generationConfig;
+  private safetyBlockThreshold;
   private chatHistory: History;
   public history: IHistory;
 
-  constructor({ model, APIkey, generationConfig }: LLMConfig) {
+  constructor({
+    model,
+    APIkey,
+    generationConfig,
+    geminiSafetyBlockThreshold,
+  }: LLMConfig) {
     this.modelName = model;
     this.APIkey = APIkey;
     this.model = this.getModelInstance();
     this.generationConfig = generationConfig;
+    this.safetyBlockThreshold = geminiSafetyBlockThreshold;
     this.chatHistory = [];
     this.history = {
       setSystemMessage: (systemMessage) => {
@@ -77,6 +82,7 @@ class LLM {
         return new Gemini({
           APIkey: this.APIkey,
           modelName: this.modelName as GeminiModelName,
+          safetyBlockThreshold: this.safetyBlockThreshold,
           generationConfig: this.generationConfig as GenerationConfig,
         });
       default:

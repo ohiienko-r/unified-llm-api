@@ -1,7 +1,7 @@
 import OpenAI from "openai";
-import { GPT_MODEL_NAME, GPT_ROLE } from "./gpt.dto";
+import { GPT_ROLE } from "./gpt.dto";
 import { defaultSystemMesage } from "../models.dto";
-import { Message, RequestOptions, GPTConfig } from "./gpt.types";
+import { Message, GPTConfig } from "./gpt.types";
 import { IModel } from "../types";
 
 /**
@@ -9,8 +9,8 @@ import { IModel } from "../types";
  */
 class ChatGPT implements IModel {
   private model: OpenAI;
-  private modelName: (typeof GPT_MODEL_NAME)[keyof typeof GPT_MODEL_NAME];
-  private requestOptions: RequestOptions | undefined;
+  private modelName;
+  private requestOptions;
 
   constructor({ APIkey, modelName = "gpt-3.5-turbo", options }: GPTConfig) {
     this.model = new OpenAI({ apiKey: APIkey });
