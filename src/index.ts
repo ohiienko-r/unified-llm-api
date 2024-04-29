@@ -55,6 +55,12 @@ class LLM {
     };
   }
 
+  /**
+   *
+   * @param {string} prompt - user's prompt to model;
+   * @param {string} systemMessage - text instructions to LLM on how to behave;
+   * @returns model response for the given chat prompt;
+   */
   async generateContent(
     prompt: string,
     systemMessage?: string
