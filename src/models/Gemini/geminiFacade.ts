@@ -18,7 +18,7 @@ class Gemini implements IModel {
   constructor({
     APIkey,
     modelName = "gemini-1.0-pro",
-    safetyBlockThreshold = "medium",
+    safetyBlockThreshold = "none",
     generationConfig,
   }: GeminiConfig) {
     const genAI = new GoogleGenerativeAI(APIkey);
@@ -40,7 +40,7 @@ class Gemini implements IModel {
     systemMessage?: string
   ): Promise<string> {
     try {
-      const req = [
+      const messages = [
         {
           role: GEMINI_ROLE.USER,
           parts: [{ text: systemMessage ?? defaultSystemMesage }],
@@ -51,7 +51,7 @@ class Gemini implements IModel {
         },
       ] as Content[];
 
-      const result = await this.model.generateContent({ contents: req });
+      const result = await this.model.generateContent({ contents: messages });
       const response = result.response;
       return response.text();
     } catch (error) {

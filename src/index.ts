@@ -1,5 +1,7 @@
 import { ChatGPT, Gemini, GPT_MODEL_NAME, GEMINI_MODEL_NAME } from "./models";
 import { ROLE, MODEL_VENDOR } from "./index.dto";
+import { RequestOptions, Message } from "./models/ChatGPT/gpt.types";
+import { Content, GenerationConfig } from "@google/generative-ai";
 import {
   LLMConfig,
   History,
@@ -9,8 +11,6 @@ import {
   ModelVendor,
   IHistory,
 } from "./types";
-import { RequestOptions } from "./models/ChatGPT/gpt.types";
-import { GenerationConfig } from "@google/generative-ai";
 
 /**
  * Class provides simple access to basic text interactions with the following LLMs: ChatGPT, Gemini;
@@ -67,13 +67,28 @@ class LLM {
   ): Promise<string | null> {
     this.history.setNewMessage({ role: ROLE.USER, content: prompt });
     const response = await this.model?.generateContent(prompt, systemMessage);
-    this.history.setNewMessage({ role: ROLE.SYSTEM, content: response });
+    this.history.setNewMessage({
+      role: ROLE.SYSTEM,
+      content: response as string,
+    });
     return response;
   }
 
-  async chat(history: History, prompt: string, systemMessage?: string) {
-    const chatHistory = this.mapHistory(history);
-    console.log(chatHistory);
+  async chat(prompt: string, systemMessage?: string) {
+    this.history.setNewMessage({ role: ROLE.USER, content: prompt });
+    const chatHistory = this.mapHistory(this.chatHistory);
+    let response;
+    if (this.model instanceof ChatGPT) {
+      response = await this.model.chat(chatHistory as Message[]);
+    } else if (this.model instanceof Gemini) {
+      response = await this.model.chat(chatHistory as Content[], prompt);
+    } else {
+      throw new Error(
+        "AN ERROR HAS OCCURED WHILE PASSING A CHAT HISTORY ARRAY"
+      );
+    }
+    this.history.setNewMessage({ role: ROLE.SYSTEM, content: response });
+    return response;
   }
 
   private getModelInstance(): Model {
@@ -96,16 +111,10 @@ class LLM {
     }
   }
 
-  private mapHistory(history: History) {
-    if (
-      Object.values(GPT_MODEL_NAME).includes(this.modelName as GPTModelName)
-    ) {
-      return history;
-    } else if (
-      Object.values(GEMINI_MODEL_NAME).includes(
-        this.modelName as GeminiModelName
-      )
-    ) {
+  private mapHistory(history: History): Message[] | Content[] {
+    if (this.model instanceof ChatGPT) {
+      return history as Message[];
+    } else if (this.model instanceof Gemini) {
       return history.map((message) => {
         let role;
         if (message.role === ROLE.SYSTEM || message.role === ROLE.ASSISTANT) {
@@ -117,7 +126,9 @@ class LLM {
           role: role,
           parts: [{ text: message.content }],
         };
-      });
+      }) as Content[];
+    } else {
+      throw new Error("AN ERROR OCCURED WHILE CONVERTING CHAT HISTORY!");
     }
   }
 

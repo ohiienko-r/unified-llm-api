@@ -55,9 +55,8 @@ class ChatGPT implements IModel {
    * @param {Message[]} messages - an array with conversation messages object/s;
    * @returns model response for the given chat conversation;
    */
-  async chat(messages: Message[], prompt: string): Promise<string | null> {
-    messages.push({ role: GPT_ROLE.USER, content: prompt });
-
+  async chat(history: Message[]): Promise<string | null> {
+    const messages = [...history];
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,
