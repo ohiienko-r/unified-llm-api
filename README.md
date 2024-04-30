@@ -92,5 +92,8 @@ However, there are also a few methods to interact with chat history because at l
    const chatHistory = model.history.get()
    ```
 
-   Return type: ```Array<{role: string, content: string}>```
+   Return type:
+   ```type
+    Array<{role: string, content: string}>
+   ```
 
