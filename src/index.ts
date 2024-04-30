@@ -160,3 +160,5 @@ class LLM {
 }
 
 export { LLM };
+export type { LLMConfig };
+export type { TextGenerationProps };
