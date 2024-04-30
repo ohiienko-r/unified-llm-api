@@ -8,6 +8,7 @@ export interface IModel {
   ): Promise<string> | Promise<string | null>;
   chat(
     history: Content[] | Message[],
-    prompt: string
+    prompt: string,
+    systemMessage?: string
   ): Promise<string> | Promise<string | null>;
 }

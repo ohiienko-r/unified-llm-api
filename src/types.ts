@@ -36,7 +36,6 @@ export type Message = {
 export type History = Message[];
 
 export interface IHistory {
-  setSystemMessage: (systemMessage: string) => void;
   setNewMessage: (newMessage: Message) => void;
   get: () => History;
   clear: () => void;

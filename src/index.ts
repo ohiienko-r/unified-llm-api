@@ -40,9 +40,6 @@ class LLM {
     this.safetyBlockThreshold = geminiSafetyBlockThreshold;
     this.chatHistory = [];
     this.history = {
-      setSystemMessage: (systemMessage) => {
-        this.chatHistory.unshift({ role: ROLE.SYSTEM, content: systemMessage });
-      },
       setNewMessage: (newMessage) => {
         this.chatHistory.push(newMessage);
       },
@@ -56,10 +53,11 @@ class LLM {
   }
 
   /**
+   * Retrieves a single response from the model based on the provided prompt.
    *
-   * @param {string} prompt - user's prompt to model;
-   * @param {string} systemMessage - text instructions to LLM on how to behave;
-   * @returns model response for the given chat prompt;
+   * @param {string} prompt - The user's input prompt for the model.
+   * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
+   * @returns The model's response to the given prompt.
    */
   async generateContent(
     prompt: string,
@@ -74,18 +72,29 @@ class LLM {
     return response;
   }
 
+  /**
+   * Initiates a chat conversation with the Language Model (LLM).
+   * LLM maintains the conversation context and tracks chat history.
+   *
+   * @param {string} prompt - The user's prompt to the model.
+   * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
+   * @returns The model's response to the provided chat prompt.
+   */
+
   async chat(prompt: string, systemMessage?: string) {
     this.history.setNewMessage({ role: ROLE.USER, content: prompt });
     const chatHistory = this.mapHistory(this.chatHistory);
     let response;
     if (this.model instanceof ChatGPT) {
-      response = await this.model.chat(chatHistory as Message[]);
+      response = await this.model.chat(chatHistory as Message[], systemMessage);
     } else if (this.model instanceof Gemini) {
-      response = await this.model.chat(chatHistory as Content[], prompt);
-    } else {
-      throw new Error(
-        "AN ERROR HAS OCCURED WHILE PASSING A CHAT HISTORY ARRAY"
+      response = await this.model.chat(
+        chatHistory as Content[],
+        prompt,
+        systemMessage
       );
+    } else {
+      throw new Error("AN ERROR HAS OCCURED WHILE FETCHING THE RESPONSE");
     }
     this.history.setNewMessage({ role: ROLE.SYSTEM, content: response });
     return response;

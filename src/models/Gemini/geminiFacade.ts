@@ -17,7 +17,7 @@ class Gemini implements IModel {
 
   constructor({
     APIkey,
-    modelName = "gemini-1.0-pro",
+    modelName = "gemini-1.5-pro-latest",
     safetyBlockThreshold = "none",
     generationConfig,
   }: GeminiConfig) {
@@ -58,16 +58,27 @@ class Gemini implements IModel {
       throw new Error(`AN ERROR HAS OCCURED: ${error}`);
     }
   }
-  //TODO: reimplement system message
+
   /**
    *
    * @param {Content[]} history - chat history array;
    * @param {string} prompt - user's prompt to model;
    * @returns text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
    */
-  async chat(history: Content[], prompt: string): Promise<string> {
+  async chat(
+    history: Content[],
+    prompt: string,
+    systemMessage?: string
+  ): Promise<string> {
+    const systemInstructions = {
+      role: GEMINI_ROLE.USER,
+      parts: [{ text: systemMessage ?? defaultSystemMesage }],
+    };
     try {
-      const chat = this.model.startChat({ history });
+      const chat = this.model.startChat({
+        history: history,
+        systemInstruction: systemInstructions,
+      });
       const result = await chat.sendMessage(prompt);
       const response = result.response;
       return response.text();

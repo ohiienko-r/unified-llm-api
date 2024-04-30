@@ -49,14 +49,22 @@ class ChatGPT implements IModel {
       throw new Error("Unexpected type returned from completions");
     }
   }
-  //TODO: reimplement system message
+
   /**
    *
    * @param {Message[]} messages - an array with conversation messages object/s;
    * @returns model response for the given chat conversation;
    */
-  async chat(history: Message[]): Promise<string | null> {
+  async chat(
+    history: Message[],
+    systemMessage?: string
+  ): Promise<string | null> {
     const messages = [...history];
+    messages.unshift({
+      role: GPT_ROLE.SYSTEM,
+      content: systemMessage ?? defaultSystemMesage,
+    });
+
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,
