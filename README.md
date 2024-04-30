@@ -74,5 +74,23 @@ main()
   
 
     Returns the model's response to the provided chat prompt.
-    
+
+### Chat history
+
+To simplify the chat interactions with LLM Unified API handles chat history for you so you don't have to deal with it. 
+However, there are also a few methods to interact with chat history because at least you have to cear it on your own :)
+
+#### Available methods
+
+1. ```javascript
+   get()
+   ```
+
+   Retrieves a chat history as an array of messages:
+   
+   ```javascript
+   const chatHistory = model.history.get()
+   ```
+
+   Return type: ```Array<{role: string, content: string}>
 
