@@ -50,16 +50,15 @@ main()
 
 #### Available methods
 
--  **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
-
-  Retrieves a single response from the model based on the provided prompt.
-  
-      Parameters: 
-    * prompt — The user's input prompt for the model.
-    * systemMessage (optional) — Optional text instructions guiding the behavior of the language model.
-  
-
-  Returns the model's response to the given prompt.
+>  **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+>
+>    Retrieves a single response from the model based on the provided prompt.
+>  
+>      Parameters: 
+>    - `prompt` — The user's input prompt for the model.
+>    - `systemMessage (optional)` — Optional text instructions guiding the behavior of the language model.
+>  
+>  Returns the model's response to the given prompt.
 
 -  **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
 
