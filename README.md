@@ -14,11 +14,15 @@ Install package in your project:
 
 ### Import
 
-> import { LLM } from "unified-llm-api";
+```javascript
+import { LLM } from "unified-llm-api";
+```
 
 ### Initialize
 
-> const model = new LLM({model: "LLM model name", APIkey: "Your API key for specified LLM"});
+```javascript
+const model = new LLM({model: "LLM model name", APIkey: "Your API key for specified LLM"});
+```
 
 Avaliable models: 
  * Google: 
@@ -36,7 +40,7 @@ Example:
 ```javascript
 const main = async () => {
 const response = await model.generateContent({prompt: "What's the meaning of life?"})
-console.log(response)<br>
+console.log(response)
 }
 
 main()
