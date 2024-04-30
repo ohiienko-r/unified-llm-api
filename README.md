@@ -50,7 +50,7 @@ main()
 
 #### Available methods
 
-1. ```typescript
+1. ```javascript
    generateContent({prompt: string, systemMessage?: string}) => Promise<string | null>
    ```
 
