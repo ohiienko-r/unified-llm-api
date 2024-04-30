@@ -5,6 +5,7 @@ import { Content, GenerationConfig } from "@google/generative-ai";
 import {
   LLMConfig,
   TextGenerationProps,
+  ChatProps,
   History,
   GPTModelName,
   GeminiModelName,
@@ -76,12 +77,18 @@ class LLM {
    *
    * @param {string} prompt - The user's prompt to the model.
    * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
+   * @param {GeneralMessage[]} history - Optional chat history. Allows to have a full control over chat history. If passed chat history is not tracked by class instance.
    * @returns The model's response to the provided chat prompt.
    */
 
-  async chat({ prompt, systemMessage }: TextGenerationProps) {
-    this.setNewMessage({ role: ROLE.USER, content: prompt });
-    const chatHistory = this.mapHistory(this.chatHistory);
+  async chat({ prompt, systemMessage, history }: ChatProps) {
+    let chatHistory;
+    if (!history) {
+      chatHistory = this.mapHistory(this.chatHistory);
+    } else {
+      chatHistory = this.mapHistory(history);
+    }
+
     let response;
     if (this.model instanceof ChatGPT) {
       response = await this.model.chat(chatHistory as Message[], systemMessage);
@@ -157,5 +164,3 @@ class LLM {
 }
 
 export { LLM };
-export type { LLMConfig };
-export type { TextGenerationProps };
