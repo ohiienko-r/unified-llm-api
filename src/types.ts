@@ -33,15 +33,14 @@ export type TextGenerationProps = {
   systemMessage?: string;
 };
 
-export type Message = {
+export type GeneralMessage = {
   role: (typeof ROLE)[keyof typeof ROLE];
   content: string | null;
 };
 
-export type History = Message[];
+export type History = GeneralMessage[];
 
 export interface IHistory {
-  setNewMessage: (newMessage: Message) => void;
   get: () => History;
   clear: () => void;
 }

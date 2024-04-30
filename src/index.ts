@@ -11,6 +11,7 @@ import {
   Model,
   ModelVendor,
   IHistory,
+  GeneralMessage,
 } from "./types";
 
 /**
@@ -41,9 +42,6 @@ class LLM {
     this.safetyBlockThreshold = geminiSafetyBlockThreshold;
     this.chatHistory = [];
     this.history = {
-      setNewMessage: (newMessage) => {
-        this.chatHistory.push(newMessage);
-      },
       get: () => {
         return this.chatHistory;
       },
@@ -52,6 +50,10 @@ class LLM {
       },
     };
   }
+
+  private setNewMessage = (newMessage: GeneralMessage): void => {
+    this.chatHistory.push(newMessage);
+  };
 
   /**
    * Retrieves a single response from the model based on the provided prompt.
@@ -78,7 +80,7 @@ class LLM {
    */
 
   async chat({ prompt, systemMessage }: TextGenerationProps) {
-    this.history.setNewMessage({ role: ROLE.USER, content: prompt });
+    this.setNewMessage({ role: ROLE.USER, content: prompt });
     const chatHistory = this.mapHistory(this.chatHistory);
     let response;
     if (this.model instanceof ChatGPT) {
@@ -92,7 +94,7 @@ class LLM {
     } else {
       throw new Error("AN ERROR HAS OCCURED WHILE FETCHING THE RESPONSE");
     }
-    this.history.setNewMessage({ role: ROLE.SYSTEM, content: response });
+    this.setNewMessage({ role: ROLE.SYSTEM, content: response });
     return response;
   }
 
