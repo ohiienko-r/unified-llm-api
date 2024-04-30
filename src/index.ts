@@ -84,6 +84,7 @@ class LLM {
   async chat({ prompt, systemMessage, history }: ChatProps) {
     let chatHistory;
     if (!history) {
+      this.setNewMessage({ role: ROLE.USER, content: prompt });
       chatHistory = this.mapHistory(this.chatHistory);
     } else {
       chatHistory = this.mapHistory(history);
