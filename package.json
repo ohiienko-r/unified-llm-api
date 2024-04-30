@@ -2,7 +2,7 @@
   "name": "unified-llm-api",
   "version": "1.0.0",
   "description": "\"One Class to rule them all\"",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
