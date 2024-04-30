@@ -52,7 +52,7 @@ main()
   Retrieves a single response from the model based on the provided prompt.
       Parameters: 
     * prompt `string` — The user's input prompt for the model.
-    * systemMessage (optional) `string` — Optional text instructions guiding the behavior of the language model.
+    * systemMessage (optional) `string` — Optional text instructions guiding the behavior of the language model. <br>
   Returns `string` the model's response to the given prompt.
     
 
