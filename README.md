@@ -93,7 +93,7 @@ However, there are also a few methods to interact with chat history because at l
    ```
 
    Return type:
-   ```type
+   ```javascript
     Array<{role: string, content: string}>
    ```
 
