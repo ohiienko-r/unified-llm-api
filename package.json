@@ -1,6 +1,6 @@
 {
   "name": "unified-llm-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "\"One Class to rule them all\"",
   "main": "dist/index.js",
   "files": [

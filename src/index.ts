@@ -64,12 +64,7 @@ class LLM {
     prompt,
     systemMessage,
   }: TextGenerationProps): Promise<string | null> {
-    this.history.setNewMessage({ role: ROLE.USER, content: prompt });
     const response = await this.model?.generateContent(prompt, systemMessage);
-    this.history.setNewMessage({
-      role: ROLE.SYSTEM,
-      content: response as string,
-    });
     return response;
   }
 
