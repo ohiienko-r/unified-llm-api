@@ -51,7 +51,6 @@ main()
 - **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
 
   Retrieves a single response from the model based on the provided prompt.
-  
       Parameters: 
     * prompt — The user's input prompt for the model.
     * systemMessage (optional) — Optional text instructions guiding the behavior of the language model.
@@ -62,7 +61,6 @@ main()
 - **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
 
   Initiates a chat conversation with the Language Model (LLM). LLM maintains the conversation context and tracks chat history.
-  
       Parameters: 
     * prompt — The user's input prompt for the model.
     * systemMessage (optional) — Optional text instructions guiding the behavior of the language model.
