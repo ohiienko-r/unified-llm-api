@@ -89,11 +89,20 @@ However, there are also a few methods to interact with chat history because at l
    Retrieves a chat history as an array of messages:
    
    ```javascript
-   const chatHistory = model.history.get()
+   const chatHistory = model.history.get();
    ```
 
    Return type:
    ```javascript
     Array<{role: string, content: string}>
+   ```
+2. ```javascript
+   clear()
+   ```
+
+   Clears a chat history array:
+   
+   ```javascript
+   model.history.clear();
    ```
 
