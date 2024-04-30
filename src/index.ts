@@ -159,4 +159,4 @@ class LLM {
   };
 }
 
-export default LLM;
+export { LLM };
