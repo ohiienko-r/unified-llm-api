@@ -10,7 +10,9 @@ Unified LLM API is a simple way to implement a LLM to your Node JS project.
 
 Install package in your project:
 
-> npm i unified-llm-api
+```bash
+npm i unified-llm-api
+```
 
 ### Import
 
