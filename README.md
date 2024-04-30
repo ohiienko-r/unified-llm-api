@@ -33,11 +33,13 @@ Avaliable models:
 ### Make a request
 
 Example: 
-`const main = async () => {
- const response = await model.generateContent({prompt: "What's the meaning of life?"})
- console.log(response)<br>
- }
+```javascript
+const main = async () => {
+const response = await model.generateContent({prompt: "What's the meaning of life?"})
+console.log(response)<br>
+}
 
-main()`
+main()
+```
 
 **Enjoy!**
