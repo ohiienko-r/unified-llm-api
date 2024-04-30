@@ -4,6 +4,7 @@ import { RequestOptions, Message } from "./models/ChatGPT/gpt.types";
 import { Content, GenerationConfig } from "@google/generative-ai";
 import {
   LLMConfig,
+  TextGenerationProps,
   History,
   GPTModelName,
   GeminiModelName,
@@ -59,10 +60,10 @@ class LLM {
    * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
    * @returns The model's response to the given prompt.
    */
-  async generateContent(
-    prompt: string,
-    systemMessage?: string
-  ): Promise<string | null> {
+  async generateContent({
+    prompt,
+    systemMessage,
+  }: TextGenerationProps): Promise<string | null> {
     this.history.setNewMessage({ role: ROLE.USER, content: prompt });
     const response = await this.model?.generateContent(prompt, systemMessage);
     this.history.setNewMessage({
@@ -81,7 +82,7 @@ class LLM {
    * @returns The model's response to the provided chat prompt.
    */
 
-  async chat(prompt: string, systemMessage?: string) {
+  async chat({ prompt, systemMessage }: TextGenerationProps) {
     this.history.setNewMessage({ role: ROLE.USER, content: prompt });
     const chatHistory = this.mapHistory(this.chatHistory);
     let response;

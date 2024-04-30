@@ -28,6 +28,11 @@ export type LLMConfig = {
   geminiSafetyBlockThreshold?: (typeof BLOCK_THRESHOLD)[keyof typeof BLOCK_THRESHOLD];
 };
 
+export type TextGenerationProps = {
+  prompt: string;
+  systemMessage?: string;
+};
+
 export type Message = {
   role: (typeof ROLE)[keyof typeof ROLE];
   content: string | null;
