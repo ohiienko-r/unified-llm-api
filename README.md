@@ -62,7 +62,9 @@ main()
   
     Returns the model's response to the given prompt.
 
-3.  **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+2.  ```javascript
+    chat({prompt: string, systemMessage?: string}) => Promise<string | null>
+    ```
 
     Initiates a chat conversation with the Language Model (LLM). LLM maintains the conversation context and tracks chat history.
   
