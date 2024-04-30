@@ -48,13 +48,13 @@ main()
 
 #### Available methods
 
-- **generateContent()**
+- **generateContent({prompt: `string`, systemMessage?: `string`}): `string`**
   Retrieves a single response from the model based on the provided prompt.
       Parameters: 
-    * prompt `string` — The user's input prompt for the model.
-    * systemMessage (optional) `string` — Optional text instructions guiding the behavior of the language model.
+    * prompt — The user's input prompt for the model.
+    * systemMessage (optional) — Optional text instructions guiding the behavior of the language model.
   
 
-Returns `string` the model's response to the given prompt.
+  Returns the model's response to the given prompt.
     
 
