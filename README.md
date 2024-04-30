@@ -2,7 +2,7 @@
 
 "One Class to rule them all"
 
-Unified LLM API is a simple way to implement an AI to your Node JS project. 
+Unified LLM API is a simple way to implement a LLM to your Node JS project. 
 
 ## Usage
 
