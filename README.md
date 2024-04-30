@@ -50,7 +50,9 @@ main()
 
 #### Available methods
 
-1. **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+1. ```javascript
+   generateContent({prompt: string, systemMessage?: string}) => Promise<string | null>
+   ```
 
     Retrieves a single response from the model based on the provided prompt.
   
@@ -60,7 +62,7 @@ main()
   
     Returns the model's response to the given prompt.
 
-2.  **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+3.  **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
 
     Initiates a chat conversation with the Language Model (LLM). LLM maintains the conversation context and tracks chat history.
   
