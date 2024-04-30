@@ -49,6 +49,7 @@ main()
 #### Available methods
 
 - **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+
   Retrieves a single response from the model based on the provided prompt.
       Parameters: 
     * prompt — The user's input prompt for the model.
