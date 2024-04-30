@@ -50,7 +50,7 @@ main()
 
 #### Available methods
 
-- > **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+-  **generateContent({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
 
   Retrieves a single response from the model based on the provided prompt.
       Parameters: 
@@ -60,7 +60,7 @@ main()
 
   Returns the model's response to the given prompt.
 
-- > **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
+-  **chat({prompt: `string`, systemMessage?: `string`}) => `Promise<string | null>`**
 
   Initiates a chat conversation with the Language Model (LLM). LLM maintains the conversation context and tracks chat history.
       Parameters: 
