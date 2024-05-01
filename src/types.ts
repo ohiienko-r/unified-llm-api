@@ -35,6 +35,7 @@ export interface TextGenerationProps {
 
 export interface ChatProps extends TextGenerationProps {
   history?: History;
+  historyCallback?: HistoryActionCallback;
 }
 
 export type GeneralMessage = {
@@ -48,3 +49,5 @@ export interface IHistory {
   get: () => History;
   clear: () => void;
 }
+
+export type HistoryActionCallback = (history: History) => void;
