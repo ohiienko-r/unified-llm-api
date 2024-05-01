@@ -24,18 +24,18 @@ export type GenerationConfigUnion =
 export type LLMConfig = {
   model: ModelNameUnion;
   APIkey: string;
-  generationConfig?: GenerationConfigUnion;
   geminiSafetyBlockThreshold?: (typeof BLOCK_THRESHOLD)[keyof typeof BLOCK_THRESHOLD];
 };
 
 export interface TextGenerationProps {
   prompt: string;
   systemMessage?: string;
+  generationConfig?: GenerationConfigUnion;
 }
 
 export interface ChatProps extends TextGenerationProps {
   history?: History;
-  historyCallback?: HistoryActionCallback;
+  onHistoryChange?: HistoryActionCallback;
 }
 
 export type GeneralMessage = {

@@ -14,6 +14,7 @@ import {
   IHistory,
   GeneralMessage,
   HistoryActionCallback,
+  GenerationConfigUnion,
 } from "./types";
 
 /**
@@ -26,21 +27,14 @@ class LLM {
   private modelName;
   private APIkey;
   private model;
-  private generationConfig;
   private safetyBlockThreshold;
   private chatHistory: History;
   public history: IHistory;
 
-  constructor({
-    model,
-    APIkey,
-    generationConfig,
-    geminiSafetyBlockThreshold,
-  }: LLMConfig) {
+  constructor({ model, APIkey, geminiSafetyBlockThreshold }: LLMConfig) {
     this.modelName = model;
     this.APIkey = APIkey;
     this.model = this.getModelInstance();
-    this.generationConfig = generationConfig;
     this.safetyBlockThreshold = geminiSafetyBlockThreshold;
     this.chatHistory = [];
     this.history = {
@@ -62,13 +56,31 @@ class LLM {
    *
    * @param {string} prompt - The user's input prompt for the model.
    * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
+   * @param {GenerationConfigUnion} generationConfig - Optional text generation settings.
    * @returns The model's response to the given prompt.
    */
   async generateContent({
     prompt,
     systemMessage,
+    generationConfig,
   }: TextGenerationProps): Promise<string | null> {
-    const response = await this.model?.generateContent(prompt, systemMessage);
+    let response;
+
+    if (this.model instanceof ChatGPT) {
+      response = await this.model.generateContent(
+        prompt,
+        systemMessage,
+        generationConfig as RequestOptions
+      );
+    } else if (this.model instanceof Gemini) {
+      response = await this.model.generateContent(
+        prompt,
+        systemMessage,
+        generationConfig as GenerationConfig
+      );
+    } else
+      throw new Error("AN ERROR HAS OCCURED: Please check the passed props");
+
     return response;
   }
 
@@ -79,11 +91,17 @@ class LLM {
    * @param {string} prompt - The user's prompt to the model.
    * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
    * @param {GeneralMessage[]} history - Optional chat history. Allows to have a full control over chat history on your own.
-   * @param {HistoryActionCallback} historyCallback - Optional callback function for interaction with internal chat history after model's reponse.
+   * @param {HistoryActionCallback} onHistoryChange - Optional callback function for interaction with internal chat history after each chat history change.
    * @returns The model's response to the provided chat prompt.
    */
 
-  async chat({ prompt, systemMessage, history, historyCallback }: ChatProps) {
+  async chat({
+    prompt,
+    systemMessage,
+    generationConfig,
+    history,
+    onHistoryChange,
+  }: ChatProps) {
     let chatHistory;
     if (!history) {
       chatHistory = this.mapHistory(this.chatHistory);
@@ -93,14 +111,22 @@ class LLM {
 
     this.setNewMessage({ role: ROLE.USER, content: prompt });
 
+    onHistoryChange && onHistoryChange(this.chatHistory);
+
     let response;
     if (this.model instanceof ChatGPT) {
-      response = await this.model.chat(chatHistory as Message[], systemMessage);
+      response = await this.model.chat(
+        chatHistory as Message[],
+        prompt,
+        systemMessage,
+        generationConfig as RequestOptions
+      );
     } else if (this.model instanceof Gemini) {
       response = await this.model.chat(
         chatHistory as Content[],
         prompt,
-        systemMessage
+        systemMessage,
+        generationConfig as GenerationConfig
       );
     } else {
       throw new Error("AN ERROR HAS OCCURED WHILE FETCHING THE RESPONSE");
@@ -108,7 +134,7 @@ class LLM {
 
     this.setNewMessage({ role: ROLE.SYSTEM, content: response });
 
-    historyCallback && historyCallback(this.chatHistory);
+    onHistoryChange && onHistoryChange(this.chatHistory);
 
     return response;
   }
@@ -119,14 +145,12 @@ class LLM {
         return new ChatGPT({
           APIkey: this.APIkey,
           modelName: this.modelName as GPTModelName,
-          options: this.generationConfig as RequestOptions,
         });
       case MODEL_VENDOR.GOOGLE:
         return new Gemini({
           APIkey: this.APIkey,
           modelName: this.modelName as GeminiModelName,
           safetyBlockThreshold: this.safetyBlockThreshold,
-          generationConfig: this.generationConfig as GenerationConfig,
         });
       default:
         throw new Error("AN ERROR HAS OCCURED: Unsupported model type.");
