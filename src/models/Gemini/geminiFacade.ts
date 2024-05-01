@@ -2,6 +2,7 @@ import {
   GoogleGenerativeAI,
   GenerativeModel,
   Content,
+  GenerationConfig,
 } from "@google/generative-ai";
 import { GEMINI_ROLE } from "./gemini.dto";
 import { defaultSystemMesage } from "../models.dto";
@@ -19,12 +20,10 @@ class Gemini implements IModel {
     APIkey,
     modelName = "gemini-1.5-pro-latest",
     safetyBlockThreshold = "none",
-    generationConfig,
   }: GeminiConfig) {
     const genAI = new GoogleGenerativeAI(APIkey);
     this.model = genAI.getGenerativeModel({
       model: modelName,
-      generationConfig: generationConfig,
       safetySettings: getSafetySettings(safetyBlockThreshold),
     });
   }
@@ -33,11 +32,13 @@ class Gemini implements IModel {
    *
    * @param {string} prompt - user's prompt to model;
    * @param {string} systemMessage - text instructions to LLM on how to behave;
+   * @param {GenerationConfig} generationConfig - text generation options object for model instance;
    * @returns text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
    */
   async generateContent(
     prompt: string,
-    systemMessage?: string
+    systemMessage?: string,
+    generationConfig?: GenerationConfig
   ): Promise<string> {
     try {
       const messages = [
@@ -51,7 +52,10 @@ class Gemini implements IModel {
         },
       ] as Content[];
 
-      const result = await this.model.generateContent({ contents: messages });
+      const result = await this.model.generateContent({
+        contents: messages,
+        generationConfig: generationConfig,
+      });
       const response = result.response;
       return response.text();
     } catch (error) {
@@ -63,12 +67,15 @@ class Gemini implements IModel {
    *
    * @param {Content[]} history - chat history array;
    * @param {string} prompt - user's prompt to model;
+   * @param {string} systemMessage - text instructions to LLM on how to behave;
+   * @param {GenerationConfig} generationConfig - text generation options object for model instance;
    * @returns text string assembled from all Parts of the first candidate of the response, if available. Throws Error if the prompt or candidate was blocked;
    */
   async chat(
     history: Content[],
     prompt: string,
-    systemMessage?: string
+    systemMessage?: string,
+    generationConfig?: GenerationConfig
   ): Promise<string> {
     const systemInstructions = {
       role: GEMINI_ROLE.USER,
@@ -78,6 +85,7 @@ class Gemini implements IModel {
       const chat = this.model.startChat({
         history: history,
         systemInstruction: systemInstructions,
+        generationConfig: generationConfig,
       });
       const result = await chat.sendMessage(prompt);
       const response = result.response;

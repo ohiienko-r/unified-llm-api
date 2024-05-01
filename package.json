@@ -1,6 +1,6 @@
 {
   "name": "unified-llm-api",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "\"One Class to rule them all\"",
   "main": "dist/index.js",
   "files": [
@@ -8,8 +8,7 @@
   ],
   "scripts": {
     "compile": "npx tsc",
-    "start": "node dist/index.js",
-    "build": "npm run build"
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",

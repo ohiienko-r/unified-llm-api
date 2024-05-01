@@ -71,7 +71,7 @@ main();
    Returns the model's response to the given prompt.
 
 2. ```javascript
-   chat({prompt: string, systemMessage?: string, history?: GeneralMessage[], historyCallback: (history: GeneralMessage[]) => void}) => Promise<string | null>
+   chat({prompt: string, systemMessage?: string, history?: GeneralMessage[], onHistoryChange: (history: GeneralMessage[]) => void}) => Promise<string | null>
    ```
 
    Initiates a chat conversation with the Language Model (LLM). LLM maintains the conversation context and tracks chat history.
@@ -81,7 +81,7 @@ main();
    - prompt — The user's input prompt for the model.
    - systemMessage (optional) — Optional text instructions guiding the behavior of the language model.
    - history (optional) — Optional chat history. Allows to have a full control over chat history on your own.
-   - historyCallback(optional) — Optional callback function for interaction with internal chat history after model's reponse.
+   - onHistoryChange(optional) — Optional callback function for interaction with internal chat history after each chat history change.
 
    Returns the model's response to the provided chat prompt.
 
@@ -126,6 +126,6 @@ However, there are also a few methods to interact with chat history because at l
 
 #### Nota bene
 
-Internal chat history is not protected from server crashes or reboots. Thus, if you want to keep it safe please consider to pass your own chat history array as a prop to `chat()` method as long as it has it as an optional prop **OR** you also have an option to pass a callback function as a prop to `chat()` to carry out manipulations with internal chat history after model's response, for example to cache chat history or save it on your side.
+Internal chat history is not protected from server crashes or reboots. Thus, if you want to keep it safe please consider to pass your own chat history array as a prop to `chat()` method as long as it has it as an optional prop **OR** you also have an option to pass a callback function as a prop to `chat()` to carry out manipulations with internal chat history after each history change, for example to cache chat history or save it on your side.
 
 Enjoy!

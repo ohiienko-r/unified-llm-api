@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { GPT_ROLE } from "./gpt.dto";
 import { defaultSystemMesage } from "../models.dto";
-import { Message, GPTConfig } from "./gpt.types";
+import { Message, GPTConfig, RequestOptions } from "./gpt.types";
 import { IModel } from "../types";
 
 /**
@@ -10,23 +10,23 @@ import { IModel } from "../types";
 class ChatGPT implements IModel {
   private model: OpenAI;
   private modelName;
-  private requestOptions;
 
   constructor({ APIkey, modelName = "gpt-3.5-turbo", options }: GPTConfig) {
     this.model = new OpenAI({ apiKey: APIkey });
     this.modelName = modelName;
-    this.requestOptions = options;
   }
 
   /**
    *
    * @param {string} prompt - user's prompt to model;
    * @param {string} systemMessage - text instructions to LLM on how to behave;
+   * @param {RequestOptions} options- text generation options object for model instance;
    * @returns model response for the given chat prompt;
    */
   async generateContent(
     prompt: string,
-    systemMessage?: string
+    systemMessage?: string,
+    options?: RequestOptions
   ): Promise<string | null> {
     const messages = [
       { role: GPT_ROLE.SYSTEM, content: systemMessage ?? defaultSystemMesage },
@@ -37,7 +37,7 @@ class ChatGPT implements IModel {
       const completions = await this.model.chat.completions.create({
         messages: messages,
         model: this.modelName,
-        ...this.requestOptions,
+        ...options,
       });
 
       if ("choices" in completions) {
@@ -52,12 +52,17 @@ class ChatGPT implements IModel {
 
   /**
    *
-   * @param {Message[]} messages - an array with conversation messages object/s;
+   * @param {Message[]} history - an array with conversation messages object/s;
+   * @param {string} prompt - user's prompt to model;
+   * @param {string} systemMessage - text instructions to LLM on how to behave;
+   * @param {RequestOptions} options- text generation options object for model instance;
    * @returns model response for the given chat conversation;
    */
   async chat(
     history: Message[],
-    systemMessage?: string
+    prompt: string,
+    systemMessage?: string,
+    options?: RequestOptions | undefined
   ): Promise<string | null> {
     const messages = [...history];
     messages.unshift({
@@ -65,11 +70,15 @@ class ChatGPT implements IModel {
       content: systemMessage ?? defaultSystemMesage,
     });
 
+    if (messages[messages.length - 1].content !== prompt) {
+      messages.push({ role: GPT_ROLE.USER, content: prompt });
+    }
+
     try {
       const completions = await this.model.chat.completions.create({
         messages: messages,
         model: this.modelName,
-        ...this.requestOptions,
+        ...options,
       });
 
       if ("choices" in completions) {
