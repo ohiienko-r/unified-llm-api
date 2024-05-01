@@ -13,6 +13,7 @@ import {
   ModelVendor,
   IHistory,
   GeneralMessage,
+  HistoryActionCallback,
 } from "./types";
 
 /**
@@ -77,18 +78,20 @@ class LLM {
    *
    * @param {string} prompt - The user's prompt to the model.
    * @param {string} systemMessage - Optional text instructions guiding the behavior of the language model.
-   * @param {GeneralMessage[]} history - Optional chat history. Allows to have a full control over chat history. If passed chat history is not tracked by class instance.
+   * @param {GeneralMessage[]} history - Optional chat history. Allows to have a full control over chat history on your own.
+   * @param {HistoryActionCallback} historyCallback - Optional callback function for interaction with internal chat history after model's reponse.
    * @returns The model's response to the provided chat prompt.
    */
 
-  async chat({ prompt, systemMessage, history }: ChatProps) {
+  async chat({ prompt, systemMessage, history, historyCallback }: ChatProps) {
     let chatHistory;
     if (!history) {
-      this.setNewMessage({ role: ROLE.USER, content: prompt });
       chatHistory = this.mapHistory(this.chatHistory);
     } else {
       chatHistory = this.mapHistory(history);
     }
+
+    this.setNewMessage({ role: ROLE.USER, content: prompt });
 
     let response;
     if (this.model instanceof ChatGPT) {
@@ -102,7 +105,11 @@ class LLM {
     } else {
       throw new Error("AN ERROR HAS OCCURED WHILE FETCHING THE RESPONSE");
     }
+
     this.setNewMessage({ role: ROLE.SYSTEM, content: response });
+
+    historyCallback && historyCallback(this.chatHistory);
+
     return response;
   }
 
