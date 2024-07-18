@@ -1,6 +1,6 @@
 {
   "name": "unified-llm-api",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "\"One Class to rule them all\"",
   "main": "dist/index.js",
   "files": [
@@ -26,6 +26,6 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.7.1",
-    "openai": "^4.38.1"
+    "openai": "^4.52.7"
   }
 }
