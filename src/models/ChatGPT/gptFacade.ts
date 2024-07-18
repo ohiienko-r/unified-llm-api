@@ -40,6 +40,10 @@ class ChatGPT implements IModel {
         ...options,
       });
 
+      if ("usage" in completions) {
+        console.log(`Total tokens count: ${completions.usage?.total_tokens}`);
+      }
+
       if ("choices" in completions) {
         return completions.choices[0].message.content;
       } else {
@@ -80,6 +84,10 @@ class ChatGPT implements IModel {
         model: this.modelName,
         ...options,
       });
+
+      if ("usage" in completions) {
+        console.log(`Total tokens count: ${completions.usage?.total_tokens}`);
+      }
 
       if ("choices" in completions) {
         return completions.choices[0].message.content;
